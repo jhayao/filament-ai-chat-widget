@@ -30,37 +30,48 @@ class AiKnowledgeBaseResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
+        $groupClass = class_exists(\Filament\Schemas\Components\Group::class)
+            ? \Filament\Schemas\Components\Group::class
+            : (class_exists(\Filament\Forms\Components\Group::class) ? \Filament\Forms\Components\Group::class : 'Group');
+
+        $sectionClass = class_exists(\Filament\Schemas\Components\Section::class)
+            ? \Filament\Schemas\Components\Section::class
+            : (class_exists(\Filament\Forms\Components\Section::class) ? \Filament\Forms\Components\Section::class : 'Section');
+
+        $textInputClass = class_exists(\Filament\Forms\Components\TextInput::class)
+            ? \Filament\Forms\Components\TextInput::class
+            : (class_exists(\Filament\Schemas\Components\TextInput::class) ? \Filament\Schemas\Components\TextInput::class : 'TextInput');
+
+        $textareaClass = class_exists(\Filament\Forms\Components\Textarea::class)
+            ? \Filament\Forms\Components\Textarea::class
+            : (class_exists(\Filament\Schemas\Components\Textarea::class) ? \Filament\Schemas\Components\Textarea::class : 'Textarea');
+
+        $toggleClass = class_exists(\Filament\Forms\Components\Toggle::class)
+            ? \Filament\Forms\Components\Toggle::class
+            : (class_exists(\Filament\Schemas\Components\Toggle::class) ? \Filament\Schemas\Components\Toggle::class : 'Toggle');
+
         return $schema
-
             ->schema([
-
-                Forms\Components\Group::make()
-
+                $groupClass::make()
                     ->schema([
-
-                        Forms\Components\Section::make()
-
+                        $sectionClass::make()
                             ->schema([
-
-                                Forms\Components\TextInput::make('name')
+                                $textInputClass::make('name')
                                     ->required()
                                     ->maxLength(255),
 
-                                Forms\Components\Textarea::make('content')
+                                $textareaClass::make('content')
                                     ->required()
                                     ->rows(8)
                                     ->columnSpanFull()
                                     ->helperText('Knowledge that will be sent to the AI assistant'),
 
-                                Forms\Components\Toggle::make('active')
+                                $toggleClass::make('active')
                                     ->required()
                                     ->default(true)
                                     ->helperText('Only active knowledge are used by the AI'),
-
                             ])->columns(2),
-
                     ])->columnSpan(1),
-
             ])->columns(2);
     }
 
