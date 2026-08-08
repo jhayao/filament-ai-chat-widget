@@ -4,6 +4,7 @@ namespace Feraandrei1\FilamentAiChatWidget\Mcp\Servers;
 
 use Feraandrei1\FilamentAiChatWidget\Mcp\Resources;
 use Laravel\Mcp\Server;
+use Laravel\Mcp\Server\Contracts\Transport;
 
 class LocalServer extends Server
 {
@@ -22,7 +23,7 @@ class LocalServer extends Server
 
     public array $prompts = [];
 
-    public function __construct(?string $name = 'local')
+    public function __construct(?Transport $transport = null)
     {
         $appName = config('app.name');
 
@@ -33,6 +34,8 @@ class LocalServer extends Server
             Politely decline requests unrelated to this application. Maintain confidentiality and prioritize user privacy.
         MARKDOWN;
 
-        parent::__construct($name ?? 'local');
+        if ($transport) {
+            parent::__construct($transport);
+        }
     }
 }
