@@ -46,4 +46,14 @@ return [
     */
 
     'request_timeout' => env('OPENAI_REQUEST_TIMEOUT', 60),
+
+    /*
+    |--------------------------------------------------------------------------
+    | OpenAI Model
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify the default OpenAI model to use for chat requests.
+    |
+    */
+    'model' => env('OPENAI_MODEL', 'gpt-4o-mini'),
 ];

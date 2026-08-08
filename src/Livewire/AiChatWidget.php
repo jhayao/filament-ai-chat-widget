@@ -58,7 +58,7 @@ class AiChatWidget extends Component
             $conversation = AiConversation::create([
                 'user_id' => Auth::id(),
                 'messages' => [],
-                'model' => 'gpt-4o-mini',
+                'model' => config('openai.model', env('OPENAI_MODEL', 'gpt-4o-mini')),
                 'temperature' => 0.5,
                 'max_tokens' => 500,
             ]);
