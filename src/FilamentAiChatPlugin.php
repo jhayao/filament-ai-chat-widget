@@ -2,6 +2,7 @@
 
 namespace Feraandrei1\FilamentAiChatWidget;
 
+use Feraandrei1\FilamentAiChatWidget\Mcp\McpResource;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\View\PanelsRenderHook;
@@ -38,6 +39,22 @@ class FilamentAiChatPlugin implements Plugin
     public static function get(): static
     {
         return filament(app(static::class)->getId());
+    }
+
+    public function resources(array $resources): static
+    {
+        $parsed = array_map(function ($item) {
+            if (is_string($item)) {
+                return McpResource::make($item);
+            }
+
+            return $item;
+        }, $resources);
+
+        $existing = config('openai.mcp.filament_resources', []);
+        config(['openai.mcp.filament_resources' => array_merge($existing, $parsed)]);
+
+        return $this;
     }
 
     public function mcpResources(array $resources): static

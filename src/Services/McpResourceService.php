@@ -57,6 +57,19 @@ class McpResourceService
             }
         }
 
+        $filamentResources = config('openai.mcp.filament_resources', []);
+        foreach ($filamentResources as $mcpResource) {
+            if ($mcpResource instanceof \Feraandrei1\FilamentAiChatWidget\Mcp\McpResource) {
+                $context = $mcpResource->generateContext();
+                if (! empty($context)) {
+                    $messages[] = [
+                        'role' => 'system',
+                        'content' => $context,
+                    ];
+                }
+            }
+        }
+
         return $messages;
     }
 
