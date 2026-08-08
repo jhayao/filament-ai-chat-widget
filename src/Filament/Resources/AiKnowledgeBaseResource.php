@@ -2,6 +2,7 @@
 
 namespace Feraandrei1\FilamentAiChatWidget\Filament\Resources;
 
+use BackedEnum;
 use Feraandrei1\FilamentAiChatWidget\Filament\Resources\AiKnowledgeBaseResource\Pages;
 use Feraandrei1\FilamentAiChatWidget\Models\AiKnowledgeBase;
 
@@ -17,7 +18,7 @@ class AiKnowledgeBaseResource extends Resource
 {
     protected static ?string $model = AiKnowledgeBase::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
     protected static function orderByOrderColumn(Builder $query): Builder
     {
