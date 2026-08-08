@@ -13,6 +13,8 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('company_id')->nullable()->index();
+            $table->unsignedBigInteger('tenant_id')->nullable()->index();
             $table->longText('messages');
 
             $table->string('model')->default('gpt-4o-mini');

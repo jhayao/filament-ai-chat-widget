@@ -12,6 +12,9 @@ return new class extends Migration
 
             $table->id();
 
+            $table->unsignedBigInteger('company_id')->nullable()->index();
+            $table->unsignedBigInteger('tenant_id')->nullable()->index();
+
             $table->string('name');
             $table->longText('content');
 

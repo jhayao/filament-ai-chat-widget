@@ -22,9 +22,17 @@ class AiChatWidget extends Component
 
     public function mount()
     {
-        $conversation = AiConversation::where('user_id', Auth::id())
-            ->latest()
-            ->first();
+        $query = AiConversation::where('user_id', Auth::id());
+
+        if (class_exists(\Filament\Facades\Filament::class) && \Filament\Facades\Filament::hasTenancy() && \Filament\Facades\Filament::getTenant()) {
+            $tenantId = \Filament\Facades\Filament::getTenant()->getKey();
+            $query->where(function ($q) use ($tenantId) {
+                $q->where('company_id', $tenantId)
+                  ->orWhere('tenant_id', $tenantId);
+            });
+        }
+
+        $conversation = $query->latest()->first();
 
         if ($conversation) {
             $this->conversationId = $conversation->id;
@@ -54,9 +62,14 @@ class AiChatWidget extends Component
         }
 
         if (! $this->conversationId) {
+            $tenantId = (class_exists(\Filament\Facades\Filament::class) && \Filament\Facades\Filament::hasTenancy() && \Filament\Facades\Filament::getTenant())
+                ? \Filament\Facades\Filament::getTenant()->getKey()
+                : null;
 
             $conversation = AiConversation::create([
                 'user_id' => Auth::id(),
+                'company_id' => $tenantId,
+                'tenant_id' => $tenantId,
                 'messages' => [],
                 'model' => config('openai.model', env('OPENAI_MODEL', 'gpt-4o-mini')),
                 'temperature' => 0.5,

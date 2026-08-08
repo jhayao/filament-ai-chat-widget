@@ -20,7 +20,7 @@ class AiKnowledgeBaseResource extends Resource
 
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
-    protected static bool $isScopedToTenant = false;
+    protected static bool $isScopedToTenant = true;
 
     protected static function orderByOrderColumn(Builder $query): Builder
     {
