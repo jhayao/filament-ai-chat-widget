@@ -12,14 +12,22 @@ class McpResourceService
     {
         $messages = [];
 
-        $server = new LocalServer();
+        $serverClasses = array_values(array_unique(array_merge([LocalServer::class], config('openai.mcp.servers', []))));
 
-        if (! empty($server->instructions)) {
-            $messages[] = [
-                'role' => 'system',
-                'content' => $server->instructions,
-            ];
-        }
+        foreach ($serverClasses as $serverClass) {
+            if (! class_exists($serverClass)) {
+                continue;
+            }
+
+            try {
+                $server = new $serverClass();
+
+                if (! empty($server->instructions)) {
+                    $messages[] = [
+                        'role' => 'system',
+                        'content' => $server->instructions,
+                    ];
+                }
 
         foreach ($server->resources as $resourceClass) {
             if (! class_exists($resourceClass)) {
@@ -54,6 +62,10 @@ class McpResourceService
                 }
             } catch (\Throwable $e) {
                 // Ignore resource errors
+            }
+        }
+            } catch (\Throwable $e) {
+                // Ignore server errors
             }
         }
 

@@ -57,6 +57,14 @@ class FilamentAiChatPlugin implements Plugin
         return $this;
     }
 
+    public function mcpServers(array $servers): static
+    {
+        $existing = config('openai.mcp.servers', []);
+        config(['openai.mcp.servers' => array_values(array_unique(array_merge($existing, $servers)))]);
+
+        return $this;
+    }
+
     public function mcpResources(array $resources): static
     {
         $existing = config('openai.mcp.resources', []);

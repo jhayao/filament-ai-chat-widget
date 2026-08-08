@@ -66,6 +66,7 @@ return [
     |
     */
     'mcp' => [
+        'servers' => [],
         'resources' => [],
         'tools' => [],
         'prompts' => [],
