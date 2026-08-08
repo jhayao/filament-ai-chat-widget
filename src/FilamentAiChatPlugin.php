@@ -39,4 +39,28 @@ class FilamentAiChatPlugin implements Plugin
     {
         return filament(app(static::class)->getId());
     }
+
+    public function mcpResources(array $resources): static
+    {
+        $existing = config('openai.mcp.resources', []);
+        config(['openai.mcp.resources' => array_values(array_unique(array_merge($existing, $resources)))]);
+
+        return $this;
+    }
+
+    public function mcpTools(array $tools): static
+    {
+        $existing = config('openai.mcp.tools', []);
+        config(['openai.mcp.tools' => array_values(array_unique(array_merge($existing, $tools)))]);
+
+        return $this;
+    }
+
+    public function mcpPrompts(array $prompts): static
+    {
+        $existing = config('openai.mcp.prompts', []);
+        config(['openai.mcp.prompts' => array_values(array_unique(array_merge($existing, $prompts)))]);
+
+        return $this;
+    }
 }

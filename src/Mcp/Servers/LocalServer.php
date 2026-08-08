@@ -34,6 +34,21 @@ class LocalServer extends Server
             Politely decline requests unrelated to this application. Maintain confidentiality and prioritize user privacy.
         MARKDOWN;
 
+        $customResources = config('openai.mcp.resources', []);
+        if (! empty($customResources) && is_array($customResources)) {
+            $this->resources = array_values(array_unique(array_merge($this->resources, $customResources)));
+        }
+
+        $customTools = config('openai.mcp.tools', []);
+        if (! empty($customTools) && is_array($customTools)) {
+            $this->tools = array_values(array_unique(array_merge($this->tools, $customTools)));
+        }
+
+        $customPrompts = config('openai.mcp.prompts', []);
+        if (! empty($customPrompts) && is_array($customPrompts)) {
+            $this->prompts = array_values(array_unique(array_merge($this->prompts, $customPrompts)));
+        }
+
         if ($transport) {
             parent::__construct($transport);
         }

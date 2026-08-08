@@ -21,27 +21,39 @@ class McpResourceService
             ];
         }
 
-        $rulesResource = new RulesResource();
-        $rulesData = json_decode($rulesResource->read(), true);
-
-        if (isset($rulesData['rules']) && is_array($rulesData['rules'])) {
-            foreach ($rulesData['rules'] as $rule) {
-                $messages[] = [
-                    'role' => 'system',
-                    'content' => $rule,
-                ];
+        foreach ($server->resources as $resourceClass) {
+            if (! class_exists($resourceClass)) {
+                continue;
             }
-        }
 
-        $knowledgeResource = new KnowledgeResource();
-        $knowledgeData = json_decode($knowledgeResource->read(), true);
+            try {
+                $resourceInstance = new $resourceClass();
+                if (method_exists($resourceInstance, 'read')) {
+                    $readContent = $resourceInstance->read();
+                    $data = is_string($readContent) ? json_decode($readContent, true) : $readContent;
 
-        if (isset($knowledgeData['knowledge']) && is_array($knowledgeData['knowledge'])) {
-            foreach ($knowledgeData['knowledge'] as $knowledge) {
-                $messages[] = [
-                    'role' => 'system',
-                    'content' => $knowledge['content'],
-                ];
+                    if (is_array($data)) {
+                        if (isset($data['rules']) && is_array($data['rules'])) {
+                            foreach ($data['rules'] as $rule) {
+                                $messages[] = ['role' => 'system', 'content' => $rule];
+                            }
+                        } elseif (isset($data['knowledge']) && is_array($data['knowledge'])) {
+                            foreach ($data['knowledge'] as $k) {
+                                if (isset($k['content'])) {
+                                    $messages[] = ['role' => 'system', 'content' => $k['content']];
+                                }
+                            }
+                        } elseif (isset($data['content'])) {
+                            $messages[] = ['role' => 'system', 'content' => (string) $data['content']];
+                        } else {
+                            $messages[] = ['role' => 'system', 'content' => json_encode($data)];
+                        }
+                    } elseif (is_string($readContent) && ! empty($readContent)) {
+                        $messages[] = ['role' => 'system', 'content' => $readContent];
+                    }
+                }
+            } catch (\Throwable $e) {
+                // Ignore resource errors
             }
         }
 

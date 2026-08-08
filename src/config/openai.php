@@ -56,4 +56,18 @@ return [
     |
     */
     'model' => env('OPENAI_MODEL', 'gpt-4o-mini'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | MCP (Model Context Protocol) Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Register custom MCP resources, tools, or prompts to expand the AI's context.
+    |
+    */
+    'mcp' => [
+        'resources' => [],
+        'tools' => [],
+        'prompts' => [],
+    ],
 ];
