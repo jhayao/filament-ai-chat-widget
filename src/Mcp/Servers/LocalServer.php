@@ -22,7 +22,7 @@ class LocalServer extends Server
 
     public array $prompts = [];
 
-    public function __construct()
+    public function __construct(?string $name = 'local')
     {
         $appName = config('app.name');
 
@@ -33,6 +33,6 @@ class LocalServer extends Server
             Politely decline requests unrelated to this application. Maintain confidentiality and prioritize user privacy.
         MARKDOWN;
 
-        parent::__construct();
+        parent::__construct($name ?? 'local');
     }
 }
