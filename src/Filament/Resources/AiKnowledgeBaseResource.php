@@ -8,6 +8,7 @@ use Feraandrei1\FilamentAiChatWidget\Models\AiKnowledgeBase;
 
 use Illuminate\Database\Eloquent\Builder;
 
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
@@ -94,14 +95,14 @@ class AiKnowledgeBaseResource extends Resource
                     ->native(false),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
+                Actions\RestoreAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
+                    Actions\RestoreBulkAction::make(),
                 ]),
             ]);
     }
